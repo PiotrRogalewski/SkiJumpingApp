@@ -9,25 +9,27 @@
         {
         }
 
-        public override void AddJumpDistanceInMeters(float meters)
+        public override void AddJumpDistance(float meters)
         {
             if (meters >= 0 && meters <= 253.5)
             {
                 this.allJumpDistances.Add(meters);
+
+                ShootEvent();
             }
             else if (meters > 253.5 && meters <= 256)
             {
-                throw new Exception("\n Wow! This is a new world record in ski jumping!\n If this really happens, let me know immediately! (Tanard from gotoit group) ;) \n But now please stop dreaming and enter the correct jump distance from 0 to 253.5 (meters).\n");
+                throw new Exception("\n Wow! This is a new world record in ski jumping!\n If this really happens, let me know immediately! (Tanard from gotoit group) ;) \n But now please stop dreaming and enter the correct jump distance from 0 to 253,5 (meters).\n");
             }
             else
             {
-                throw new Exception("\n This distance is out of range! Enter the jump distance from 0 to 253.5 (meters).\n");
+                throw new Exception("\n This distance is out of range! Enter the jump distance from 0 to 253,5 (meters).\n");
             }
         }
 
-        public override void AddJumpDistanceInMeters(string meters)
+        public override void AddJumpDistance(string meters)
         {
-            base.AddJumpDistanceInMeters(meters);
+            base.AddJumpDistance(meters);
         }
 
         public override Statistics GetStatistics()
@@ -36,7 +38,7 @@
 
             foreach (var meters in allJumpDistances)
             {
-                statistics.AddJumpInMeters(meters);    
+                statistics.AddJumpDistance(meters);
             }
 
             return statistics;

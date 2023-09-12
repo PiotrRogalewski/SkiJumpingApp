@@ -11,10 +11,11 @@ internal class Program
         string? savingMethodSelection = null;
         Statistics? statistics = null;
 
+        Welcome();
+
         while (!exit)
         {
-            Welcome();
-            TextInColor(ConsoleColor.White, "\n Select the ski jumper for whom you want to add jump distance to his jumping statistics.\n To do this - please type the number assigned to the ski jumper and then press ENTER button.\n\n 1 - Kamil Stoch\n 2 - Dawid Kubacki\n 3 - Piotr Żyła\n\n");
+            TextInColor(ConsoleColor.White, "\n Please select the ski jumper for whom you want to add jump distance to his jumping statistics.\n To do this - please type the number assigned to the ski jumper and then press ENTER button.\n\n 1 - Kamil Stoch\n 2 - Dawid Kubacki\n 3 - Piotr Żyła\n\n");
 
             var skiJumperSelection = Console.ReadLine();
 
@@ -53,11 +54,13 @@ internal class Program
             if (savingMethodSelection == "1")
             {
                 TextInColor(ConsoleColor.Green, "\n You have chosen to save the data to a file\n");
+                skiJumperInFile.JumpDistanceAddedToList += JumpDistanceAddedMessage;
                 exit = true;
             }
             else if (savingMethodSelection == "2")
             {
-                TextInColor(ConsoleColor.Green, "\n You have chosen to save the data to program memory\n");
+                TextInColor(ConsoleColor.Green, "\n You have chosen to save the data to the program memory\n");
+                skiJumperInMemory.JumpDistanceAddedToList += JumpDistanceAddedMessage;
                 exit = true;
             }
             else
@@ -69,7 +72,7 @@ internal class Program
 
         while (savingMethodSelection != null)
         {
-            TextInColor(ConsoleColor.DarkGreen, "\n Enter the length of the jump in meters (you can also enter a value after a decimal point),\n then press ENTER button. Use only digits, no words or letters.\n");
+            TextInColor(ConsoleColor.DarkGreen, "\n Enter the length of the jump in meters, then press ENTER button. Use only digits, no words or letters.\n");
             var input = Console.ReadLine();
 
             if (input == "q")
@@ -81,15 +84,11 @@ internal class Program
             {
                 if (savingMethodSelection == "1")
                 {
-                    skiJumperInFile.AddJumpDistanceInMeters(input);
+                    skiJumperInFile.AddJumpDistance(input);
                 }
                 else if (savingMethodSelection == "2")
                 {
-                    skiJumperInMemory.AddJumpDistanceInMeters(input);
-                }
-                else
-                {
-                    TextInColor(ConsoleColor.Red, " Something went wrong!\n This savingMethodSelection shouldn't be null.\n ");
+                    skiJumperInMemory.AddJumpDistance(input);
                 }
             }
             catch (Exception exception)
@@ -98,26 +97,33 @@ internal class Program
             }
             finally
             {
-                TextInColor(ConsoleColor.DarkGray, "\n To quit and show statistics type 'q', then press ENTER button.\n");
+                TextInColor(ConsoleColor.DarkMagenta, "\n===============================================================\n To quit and show statistics type 'q', then press ENTER button\n===============================================================\n");
             }
         }
+
+        var savingDone = " This data ";
 
         if (savingMethodSelection == "1")
         {
             statistics = skiJumperInFile.GetStatistics();
+            savingDone += "is saved to txt file with Ski Jumper's full name.";
         }
         else if (savingMethodSelection == "2")
         {
             statistics = skiJumperInMemory.GetStatistics();
+            savingDone += "will be lost when you close this console window.";
         }
 
-        TextInColor(ConsoleColor.Yellow, $"\n Statistics of the jumps for {skiJumperInMemory.Name} {skiJumperInMemory.Surname} from {skiJumperInMemory.Country}, {skiJumperInMemory.Age} years old.\n" +
-            $"\n The best jump:                     {statistics.Max} m" +
-            $"\n The worst jump:                    {statistics.Min} m" +
-            $"\n Number of jumps:                   {statistics.Count}" +
-            $"\n Ski jumping average:               {statistics.SkiJumpingAverage} m" +
-            $"\n Ski jumper class (A is the best):  {statistics.SkiJumpingAverageAsLetter}");
-
+        TextInColor(ConsoleColor.Yellow,
+            $"\n||======================================================================||\n\n" +
+            $"    Statistics of the jumps for {skiJumperInMemory.Name} {skiJumperInMemory.Surname} from {skiJumperInMemory.Country}, {skiJumperInMemory.Age} years old.\n\n" +
+            $"\n    The best jump:                     {statistics.Max} m" +
+            $"\n    The worst jump:                    {statistics.Min} m" +
+            $"\n    Number of jumps:                   {statistics.Count}" +
+            $"\n    Ski jumping average:               {statistics.SkiJumpingAverage} m\n" +
+            $"\n    Ski jumper's skill level:          {statistics.SkiJumpingAverageAsLetter}\n\n    [from F to A - and the highest level is A]\n" +
+            $"\n||======================================================================||\n");
+        TextInColor(ConsoleColor.Magenta, $"\n {savingDone}\n");
         ChangeSkiJumperOrExit();
     }
 
@@ -125,7 +131,7 @@ internal class Program
     {
         while (true)
         {
-            TextInColor(ConsoleColor.Cyan, "\n What next?\n\n >>> to change the ski jumper click:        'c' button and then press ENTER button\n >>> to exit from the program click:        'x' or 'q' button, then press ENTER button\n");
+            TextInColor(ConsoleColor.Cyan, "\n What next?\n\n >>> to CHANGE ski jumper click 'c' and then press ENTER button\n >>> to EXIT from the program click 'x' or 'q', then press ENTER button\n");
             var nextMove = Console.ReadLine();
 
             if (nextMove == "c")
@@ -136,7 +142,7 @@ internal class Program
             }
             else if (nextMove == "x" || nextMove == "q")
             {
-                TextInColor(ConsoleColor.Magenta, "\n Catch the wind and fly high! See yaa! :) \n\n\n======================================================================================================================\n                                        To exit the program, press any key\n======================================================================================================================");
+                TextInColor(ConsoleColor.Green, "\n See you later! :) \n\n\n======================================================================================================================\n                                        To exit the program, press any key\n======================================================================================================================");
                 break;
             }
             else
@@ -145,6 +151,11 @@ internal class Program
                 continue;
             }
         }
+    }
+
+    static void JumpDistanceAddedMessage(object sender, EventArgs args)
+    {
+        TextInColor(ConsoleColor.Green, "\n New jump distance was added to chosen Ski Jumper statistics!");
     }
 
     private static void Welcome()
@@ -164,4 +175,4 @@ internal class Program
         Console.WriteLine(text);
         Console.ResetColor();
     }
-}   
+}

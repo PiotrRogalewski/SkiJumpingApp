@@ -11,7 +11,7 @@
             fileWithFullName = $"{emptyFile}" + $"_of_{name}_{surname}";
         }
 
-        public override void AddJumpDistanceInMeters(float meters)
+        public override void AddJumpDistance(float meters)
         {
             if (meters > 0 && meters <= 253.5)
             {
@@ -19,19 +19,21 @@
                 {
                     writer.WriteLine(meters);
                 }
+
+                ShootEvent();
             }
             else if (meters > 253.5 && meters <= 256)
             {
-                throw new Exception("\n Wow! This is a new world record in ski jumping!\n If this really happens, let me know immediately! (Tanard from gotoit group) ;) \n But now please stop dreaming and enter the correct jump distance from 0 to 253.5 (meters).\n");
+                throw new Exception("\n Wow! This is a new world record in ski jumping!\n If this really happens, let me know immediately! (Tanard from gotoit group) ;) \n But now please stop dreaming and enter the correct jump distance from 0 to 253,5 (meters).\n");
             }
             else
             {
-                throw new Exception("\n This distance is out of range! Enter the jump distance from 0 to 253.5 (meters).\n");
+                throw new Exception("\n This distance is out of range! Enter the jump distance from 0 to 253,5 (meters).\n");
             }
         }
-        public override void AddJumpDistanceInMeters(string meters)
+        public override void AddJumpDistance(string meters)
         {
-            base.AddJumpDistanceInMeters(meters);
+            base.AddJumpDistance(meters);
         }
 
         private List<float> ReadMetersFromFile()
@@ -42,18 +44,11 @@
             {
                 using (var reader = File.OpenText($"{fileWithFullName}"))
                 {
-                    var line = reader.ReadLine();
-                    while (line != null)
+                    for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
                     {
-                        var number = float.Parse(line);
-                        allJumpDistances.Add(number);
-                        line = reader.ReadLine();
+                        allJumpDistances.Add(float.Parse(line));
                     }
                 }
-            }
-            else
-            {
-                throw new Exception("\n The file does not exist or has just been created.\n");
             }
 
             return allJumpDistances;
@@ -65,12 +60,12 @@
 
             foreach (var meters in allJumpDistances)
             {
-                statistics.AddJumpInMeters(meters);
+                statistics.AddJumpDistance(meters);
             }
 
             return statistics;
         }
-            
+
 
         public override Statistics GetStatistics()
         {

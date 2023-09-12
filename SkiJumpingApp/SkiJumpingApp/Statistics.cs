@@ -8,7 +8,7 @@
 
         public float Sum { get; private set; }
 
-        public float Count { get; private set; }
+        public int Count { get; private set; }
 
         public float SkiJumpingAverage
         {
@@ -50,7 +50,7 @@
             this.Count = 0;
         }
 
-        public void AddJumpInMeters(float meters)
+        public void AddJumpDistance(float meters)
         {
             this.Count++;
             this.Sum += meters;
